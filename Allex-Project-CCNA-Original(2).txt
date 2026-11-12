@@ -1,0 +1,23 @@
+Allex-Project-CCNA.txt
+
+You are a network engineer. You need to choose any organization and plan, design, and implement its network.
+
+Requirements:
+*** Use Variable Length Subnetting (VLSM) ***
+
+1. Use OSPF as the routing protocol.
+2. Use the VLAN concept and implement inter-VLAN routing using Router-on-a-Stick (ROAS).
+3. Use a DHCP server for network configuration (standalone server).
+4. Use AAA for authentication and consider a local admin user.
+5. All routers used must be configured with your team name.
+6. All switches used must be configured with your team name.
+7. Use a web server with public IP address 50.50.50.2 (Static NAT).
+8. Use EtherChannel on switches for backup/redundancy.
+9. Use HSRP for redundancy between routers.
+10. Back up all configurations on an FTP server (at least one switch and one router).
+11. Use SSH on at least one router.
+12. Document each step in a PDF file with detailed screenshots and simple explanations.
+
+Packet Tracer version: 8.2.2
+
+Deadline: 21/11/2025
