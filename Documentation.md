@@ -42,9 +42,4 @@
 - **DMZ** = Demilitarized Zone (the public web server VLAN)
 - **AAA** = Authentication, Authorization, Accounting
 - **FTP** = File Transfer Protocol
-WCM: 0.0.0.3
----(BSE-R2-CAI -> BSE-EDGE-CAI)---
-192.168.1.92/30
-SNM: 255.255.255.252
-WCM: 0.0.0.3
-```
+
