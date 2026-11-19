@@ -519,3 +519,447 @@ show ip interface vlan 10
 
 sh running | include default-gateway
 
+
+
+
+
+
+
+
+
+## BSE-R1-ALEX
+A3.1 ! applying no shut and IP between the routers
+en
+conf t
+
+int  g0/0
+ip add 172.16.1.34 255.255.255.252
+no shut
+exit
+
+int g0/1
+no shut
+exit
+
+
+A3.2 ! Creating subinterfaces per vlan for inter-vlan routing
+en
+conf t
+
+int g0/1.10
+encap dot1Q 10
+ip add 172.16.1.2 255.255.255.240
+no shut
+exit
+
+int g0/1.20
+encap dot1Q 20
+ip add 172.16.0.194 255.255.255.224
+no shut
+exit
+
+int g0/1.30
+encap dot1Q 30
+ip add 172.16.0.2 255.255.255.128
+no shut
+exit
+
+int g0/1.40
+encap dot1Q 40
+ip add 172.16.0.130 255.255.255.192
+no shut
+exit
+
+int g0/1.50
+encap dot1Q 50
+ip add 172.16.0.226 255.255.255.224
+no shut
+exit
+
+int g0/1.60
+encap dot1Q 60
+ip add 172.16.1.18 255.255.255.248
+no shut
+exit
+
+int g0/1.70
+encap dot1Q 70
+ip add 172.16.1.26 255.255.255.248
+no shut
+exit
+
+
+A3.3 ! configure HSRB Active with R1 and standby R2 with preempt
+en
+conf t
+
+
+int g0/1.10
+standby 10 ip 172.16.1.1
+standby 10 prio 110
+standby 10 preempt
+
+
+int g0/1.20
+standby 20 ip 172.16.0.193
+standby 20 prio 110
+standby 20 preempt
+
+
+int g0/1.30
+standby 30 ip 172.16.0.1
+standby 30 prio 110
+standby 30 preempt
+
+
+int g0/1.40
+standby 40 ip 172.16.0.129
+standby 40 prio 110
+standby 40 preempt
+
+
+int g0/1.50
+standby 50 ip 172.16.0.225
+standby 50 prio 110
+standby 50 preempt
+
+int g0/1.60
+standby 60 ip 172.16.1.17
+standby 60 prio 110
+standby 60 preempt
+
+
+
+int g0/1.70
+standby 70 ip 172.16.1.25
+standby 70 prio 110
+standby 70 preempt
+exit
+end
+
+sh standby
+
+A3.6 ! add ip helper to vlan sub interfaces
+en
+conf t
+
+int g0/1.10
+ip helper-address 172.16.1.20
+
+int g0/1.20
+ip helper-address 172.16.1.20
+
+int g0/1.30
+ip helper-address 172.16.1.20
+
+int g0/1.40
+ip helper-address 172.16.1.20
+
+int g0/1.50
+ip helper-address 172.16.1.20
+
+int g0/1.60
+ip helper-address 172.16.1.20
+
+int g0/1.70
+ip helper-address 172.16.1.20
+exit
+end
+
+
+
+A4.1 ! internal ospf and passive interfaces
+en
+conf t
+
+router ospf 1
+router-id 1.1.1.1
+
+
+net 172.16.1.0 0.0.0.15 area 1
+net 172.16.0.192 0.0.0.31 area 1
+net 172.16.0.0 0.0.0.127 area 1
+net 172.16.0.128 0.0.0.63 area 1
+net 172.16.0.224 0.0.0.31 area 1
+net 172.16.1.16 0.0.0.7 area 1
+net 172.16.1.24 0.0.0.7 area 1
+net 172.16.1.32 0.0.0.3 area 1
+
+
+passive-interface g0/1.10
+passive-interface g0/1.20
+passive-interface g0/1.30
+passive-interface g0/1.40
+passive-interface g0/1.50
+passive-interface g0/1.60
+passive-interface g0/1.70
+end
+
+
+
+
+## BSE-R2-ALEX
+A3.1 ! applying no shut and IP between the routers
+en
+conf t
+
+int  g0/0
+ip add 172.16.1.38 255.255.255.252
+no shut
+exit
+
+int g0/1
+no shut
+exit
+
+A3.2 ! Creating subinterfaces per vlan for inter-vlan routing
+en
+conf t
+
+int g0/1.10
+encap dot1Q 10
+ip add 172.16.1.3 255.255.255.240
+no shut
+exit
+
+int g0/1.20
+encap dot1Q 20
+ip add 172.16.0.195 255.255.255.224
+no shut
+exit
+
+int g0/1.30
+encap dot1Q 30
+ip add 172.16.0.3 255.255.255.128
+no shut
+exit
+
+int g0/1.40
+encap dot1Q 40
+ip add 172.16.0.131 255.255.255.192
+no shut
+exit
+
+int g0/1.50
+encap dot1Q 50
+ip add 172.16.0.227 255.255.255.224
+no shut
+exit
+
+int g0/1.60
+encap dot1Q 60
+ip add 172.16.1.19 255.255.255.248
+no shut
+exit
+
+int g0/1.70
+encap dot1Q 70
+ip add 172.16.1.27 255.255.255.248
+no shut
+exit
+
+
+
+A3.3 ! configure HSRB Active with R1 and standby R2 with preempt
+en
+conf t
+
+
+int g0/1.10
+standby 10 ip 172.16.1.1
+standby 10 prio 90
+standby 10 preempt
+
+
+int g0/1.20
+standby 20 ip 172.16.0.193
+standby 20 prio 90
+standby 20 preempt
+
+
+int g0/1.30
+standby 30 ip 172.16.0.1
+standby 30 prio 90
+standby 30 preempt
+
+
+int g0/1.40
+standby 40 ip 172.16.0.129
+standby 40 prio 90
+standby 40 preempt
+
+
+int g0/1.50
+standby 50 ip 172.16.0.225
+standby 50 prio 90
+standby 50 preempt
+
+int g0/1.60
+standby 60 ip 172.16.1.17
+standby 60 prio 90
+standby 60 preempt
+
+
+
+int g0/1.70
+standby 70 ip 172.16.1.25
+standby 70 prio 90
+standby 70 preempt
+exit
+end
+
+sh standby brief
+
+
+
+
+A3.6 ! add ip helper to vlan sub interfaces
+en
+conf t
+
+int g0/1.10
+ip helper-address 172.16.1.20
+
+int g0/1.20
+ip helper-address 172.16.1.20
+
+int g0/1.30
+ip helper-address 172.16.1.20
+
+int g0/1.40
+ip helper-address 172.16.1.20
+
+int g0/1.50
+ip helper-address 172.16.1.20
+
+int g0/1.60
+ip helper-address 172.16.1.20
+
+int g0/1.70
+ip helper-address 172.16.1.20
+exit
+end
+
+
+
+A4.1 ! internal ospf and passive interfaces
+en
+conf t
+
+router ospf 1
+router-id 2.2.2.2
+
+net 172.16.1.0 0.0.0.15 area 1
+net 172.16.0.192 0.0.0.31 area 1
+net 172.16.0.0 0.0.0.127 area 1
+net 172.16.0.128 0.0.0.63 area 1
+net 172.16.0.224 0.0.0.31 area 1
+net 172.16.1.16 0.0.0.7 area 1
+net 172.16.1.24 0.0.0.7 area 1
+net 172.16.1.36 0.0.0.3 area 1
+
+
+passive-interface g0/1.10
+passive-interface g0/1.20
+passive-interface g0/1.30
+passive-interface g0/1.40
+passive-interface g0/1.50
+passive-interface g0/1.60
+passive-interface g0/1.70
+end
+
+
+
+
+## BSE-EDGE-ALEX
+A3.1 ! applying no shut and IP between the routers
+en
+conf t
+
+int  g0/0
+ip add 172.16.1.33 255.255.255.252
+no shut
+exit
+
+int g0/1
+ip add 172.16.1.37 255.255.255.252
+no shut
+exit
+
+int s0/0/0
+ip add 200.200.200.2 255.255.255.252
+no shut
+exit
+
+int s0/0/1
+ip add 172.16.1.41 255.255.255.252
+no shut
+exit
+
+
+A4.1 ! internal ospf and passive interfaces
+en
+conf t
+
+router ospf 1
+router-id 3.3.3.3
+
+conf  t
+router ospf 1
+no net 172.16.1.32 0.0.0.3 area 0
+no net 172.16.1.36 0.0.0.3 area 0
+no net 200.200.200.0 0.0.0.3 area 0
+net 172.16.1.40 0.0.0.3 area 0
+
+net 172.16.1.32 0.0.0.3 area 1
+net 172.16.1.36 0.0.0.3 area 1
+net 200.200.200.0 0.0.0.3 area 1
+
+end
+
+A4.3 ! default route and default-orignate to isp efault-information originate advertises the default route only when EDGE-ALEX already has a default route in its routing table. !
+en
+conf t
+
+ip route 0.0.0.0 0.0.0.0 200.200.200.1
+
+router ospf 1
+default-information originate
+
+end
+
+
+A4.4 ! config PAT that permits the private ips of alex and cairo
+en
+conf t
+
+
+ip access-list standard NAT-PRIVATE-NETWORKS
+permit 172.16.1.0 0.0.0.15
+permit 172.16.0.192 0.0.0.31
+permit 172.16.0.0 0.0.0.127
+permit 172.16.0.128 0.0.0.63
+permit 172.16.0.224 0.0.0.31
+permit 172.16.1.16 0.0.0.7
+permit 172.16.1.24 0.0.0.7
+ 
+ 
+permit 192.168.1.0 0.0.0.63
+permit 192.168.1.64 0.0.0.15
+permit 192.168.1.80 0.0.0.7
+exit
+
+int r g0/0-1
+ip nat inside
+
+int s0/0/1
+ip nat inside
+
+int s0/0/0
+ip nat outside
+exit
+
+
+ip nat inside source list NAT-PRIVATE-NETWORKS interface serial0/0/0 overload
+
+end
