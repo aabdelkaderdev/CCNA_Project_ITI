@@ -58,7 +58,7 @@ A2.6 ! making STP primary
 en
 conf t
 
-spanning-tree vlan 10,30,40,50,60,70 root primary
+spanning-tree vlan 10,20,30,40,50,60,70 root primary
 
 end
 show spanning-tree
@@ -77,6 +77,49 @@ end
 
 show ip interface vlan 10
 sh running | include default-gateway
+
+
+
+
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
+
+
+
+
+
+
+
+
 
 ## BSE-SW-Core-1-ALEX
 A2.1! building the LACP on SW2
@@ -138,7 +181,7 @@ A2.6 ! making STP primary
 en
 conf t
 
-spanning-tree vlan 10,30,40,50,60,70 root secondary
+spanning-tree vlan 10,20,30,40,50,60,70 root secondary
 
 end
 show spanning-tree
@@ -157,6 +200,45 @@ end
 
 show ip interface vlan 10
 sh running | include default-gateway
+
+
+
+
+
+
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
+
+
 
 ## BSE-SW-Admin-ALEX
 A2.4 ! creating the vtp clients
@@ -221,6 +303,50 @@ end
 
 show ip interface vlan 10
 sh running | include default-gateway
+
+
+
+
+
+
+
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
+
+
+
+
+
+
 
 
 ## BSE-SW-HR-ALEX
@@ -290,6 +416,47 @@ end
 show ip interface vlan 10
 
 sh running | include default-gateway
+
+
+
+
+
+
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
+
+
+
+
 
 
 ## BSE-SW-Clinical-ALEX
@@ -363,6 +530,37 @@ show ip interface vlan 10
 sh running | include default-gateway
 
 
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
 
 
 ## BSE-SW-ELV-ALEX
@@ -444,6 +642,44 @@ sh running | include default-gateway
 
 
 
+
+
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
+
+
+
+
+
 ## BSE-SW-Server-ALEX
 A2.4 ! creating the vtp clients
 en
@@ -520,6 +756,40 @@ show ip interface vlan 10
 sh running | include default-gateway
 
 
+
+
+
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
 
 
 
@@ -697,6 +967,50 @@ end
 
 
 
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
+
+
+A5.10 ! shutting down the interface on R1 to see R2 turn to active
+en
+conf t
+
+int g0/1
+shut
+
+!bringing the interface up again and seeing the R1 takes active role again because of preempt
+
+int g0/1
+no shut
 
 ## BSE-R2-ALEX
 A3.1 ! applying no shut and IP between the routers
@@ -868,6 +1182,40 @@ passive-interface g0/1.60
 passive-interface g0/1.70
 end
 
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
+
+
+
 
 
 
@@ -963,3 +1311,38 @@ exit
 ip nat inside source list NAT-PRIVATE-NETWORKS interface serial0/0/0 overload
 
 end
+
+
+A5.7 - 9 ! configuring ssh and enable secert and vty lines
+en
+conf t
+
+ip domain-name bse.alex
+enable secret bse123
+username admin privilege 15 secret admin123
+crypto key generate rsa
+1024
+
+ip ssh version 2
+line vty 0 4
+login local
+transport input ssh
+exit
+
+service password-encryption
+banner motd #Unauthorized access is strictly prohibited!#
+
+
+! creating the acl that allows only adminstrators only to ssh
+ip access-list standard SSH-ACCESS
+permit 172.16.1.0 0.0.0.15
+exit
+
+line vty 0 4
+access-class SSH-ACCESS in
+
+end
+
+copy running-config startup-config
+
+

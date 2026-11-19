@@ -1,0 +1,184 @@
+BSE-SW-Core-2-ALEX#sh spanning-tree 
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    24577
+             Address     00E0.F995.E62D
+             Cost        12
+             Port        27(Port-channel1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28673  (priority 28672 sys-id-ext 1)
+             Address     00E0.F917.C02D
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/5            Desg FWD 19        128.5    P2p
+Fa0/7            Desg FWD 19        128.7    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+Fa0/6            Desg FWD 19        128.6    P2p
+Fa0/8            Desg FWD 19        128.8    P2p
+Po1              Root FWD 12        128.27   P2p
+
+VLAN0010
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    24586
+             Address     00E0.F995.E62D
+             Cost        12
+             Port        27(Port-channel1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28682  (priority 28672 sys-id-ext 10)
+             Address     00E0.F917.C02D
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/5            Desg FWD 19        128.5    P2p
+Fa0/7            Desg FWD 19        128.7    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+Fa0/6            Desg FWD 19        128.6    P2p
+Fa0/8            Desg FWD 19        128.8    P2p
+Po1              Root FWD 12        128.27   P2p
+
+VLAN0020
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    24596
+             Address     00E0.F995.E62D
+             Cost        12
+             Port        27(Port-channel1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28692  (priority 28672 sys-id-ext 20)
+             Address     00E0.F917.C02D
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/5            Desg FWD 19        128.5    P2p
+Fa0/7            Desg FWD 19        128.7    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+Fa0/6            Desg FWD 19        128.6    P2p
+Fa0/8            Desg FWD 19        128.8    P2p
+Po1              Root FWD 12        128.27   P2p
+
+VLAN0030
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    24606
+             Address     00E0.F995.E62D
+             Cost        12
+             Port        27(Port-channel1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28702  (priority 28672 sys-id-ext 30)
+             Address     00E0.F917.C02D
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/5            Desg FWD 19        128.5    P2p
+Fa0/7            Desg FWD 19        128.7    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+Fa0/6            Desg FWD 19        128.6    P2p
+Fa0/8            Desg FWD 19        128.8    P2p
+Po1              Root FWD 12        128.27   P2p
+
+VLAN0040
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    24616
+             Address     00E0.F995.E62D
+             Cost        12
+             Port        27(Port-channel1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28712  (priority 28672 sys-id-ext 40)
+             Address     00E0.F917.C02D
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/5            Desg FWD 19        128.5    P2p
+Fa0/7            Desg FWD 19        128.7    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+Fa0/6            Desg FWD 19        128.6    P2p
+Fa0/8            Desg FWD 19        128.8    P2p
+Po1              Root FWD 12        128.27   P2p
+
+VLAN0050
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    24626
+             Address     00E0.F995.E62D
+             Cost        12
+             Port        27(Port-channel1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28722  (priority 28672 sys-id-ext 50)
+             Address     00E0.F917.C02D
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/5            Desg FWD 19        128.5    P2p
+Fa0/7            Desg FWD 19        128.7    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+Fa0/6            Desg FWD 19        128.6    P2p
+Fa0/8            Desg FWD 19        128.8    P2p
+Po1              Root FWD 12        128.27   P2p
+
+VLAN0060
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    24636
+             Address     00E0.F995.E62D
+             Cost        12
+             Port        27(Port-channel1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28732  (priority 28672 sys-id-ext 60)
+             Address     00E0.F917.C02D
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/5            Desg FWD 19        128.5    P2p
+Fa0/7            Desg FWD 19        128.7    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+Fa0/6            Desg FWD 19        128.6    P2p
+Fa0/8            Desg FWD 19        128.8    P2p
+Po1              Root FWD 12        128.27   P2p
+
+VLAN0070
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    24646
+             Address     00E0.F995.E62D
+             Cost        12
+             Port        27(Port-channel1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    28742  (priority 28672 sys-id-ext 70)
+             Address     00E0.F917.C02D
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/5            Desg FWD 19        128.5    P2p
+Fa0/7            Desg FWD 19        128.7    P2p
+Fa0/1            Desg FWD 19        128.1    P2p
+Fa0/4            Desg FWD 19        128.4    P2p
+Fa0/6            Desg FWD 19        128.6    P2p
+Fa0/8            Desg FWD 19        128.8    P2p
+Po1              Root FWD 12        128.27   P2p
