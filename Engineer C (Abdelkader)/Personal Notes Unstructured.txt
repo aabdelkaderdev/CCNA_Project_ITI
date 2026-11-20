@@ -1,0 +1,95 @@
+Alexandria:
+
+A2.1:
+We used LACP EtherChannel between the two core switches to bundle them into a single logical interface. This maintains link redundancy and prevents STP from blocking the extra link, which keeps the root bridge election stable. This approach provides fast link failover and stability. It means that if one of the two physical cables fails, it won’t affect the STP root bridge or its BPDU communication. This design choice is very common in enterprise networks for redundancy and fault tolerance.
+
+A2.2:
+We used trunking with 802.1Q encapsulation. The 802.1Q standard is a VLAN tagging mechanism with a header size of 4 bytes. It enables devices to identify exactly which frames belong to which VLANs. We enabled trunking on the first 8 interfaces of each core switch, which allows frames to pass tagged from switch to switch and from a switch to a router.
+
+A2.3:
+VLAN Trunking Protocol (VTP) is a Cisco-developed protocol that allowed us to use the core switches as centralized servers that host a VLAN database and synchronize it to the other client switches. This approach saves a ton of hassle when configuring a large number of switches in production environments. The server switch with the highest revision number is the one whose database the client switches use.
+
+A2.4:
+The access switches are configured as client switches, and they inherit the server switch’s VLAN database.
+
+A2.5:
+Each access switch had its interfaces facing the host devices configured in access mode and constrained to the appropriate department VLAN.
+
+A2.6:
+Spanning Tree Protocol (STP) solves a problem that switches have when they are connected in a loop configuration.
+
+When a switch receives a frame whose destination MAC address is not in its MAC address table (and so is not mapped to a port), it floods the frame out of all of its ports except the one the frame came in on. That frame can reach another switch, which does the same thing, and the next switch does the same again, until the switches become overloaded, the MAC table becomes corrupted, and a switch ends up acting more like a hub than a switch. This problem is called a broadcast storm.
+
+Spanning Tree Protocol fixes this problem by doing the following:
+
+Electing a root switch, which handles the transmission of most of the frames.
+Having each of the other switches elect a designated port, which is responsible for moving traffic away from the root switch.
+Blocking the non-designated ports on the remaining switches, so that frames that have already reached the root bridge do not travel back to it.
+
+The root switch is elected based on its bridge ID, a combination of a priority number and a MAC address. The priority is compared first, then the MAC address. The switch with the lowest bridge ID becomes the root.
+
+In this configuration, we used a simple command that directly defines which core switch is the primary root and which is the secondary root for backup, instead of having to modify the switch STP priorities manually.
+
+
+A2.7:
+We enabled PortFast and BPDU Guard on all the host-facing access ports and shut down every unused port on the access switches. PortFast makes a port skip the STP listening and learning states and go straight to forwarding, so PCs, servers and cameras get connectivity immediately instead of waiting around 30 seconds. BPDU Guard goes along with it, because if a PortFast port ever receives a BPDU, meaning someone plugged a switch into it, the port gets err-disabled. This prevents an unauthorized switch from changing the STP topology or trying to become the root bridge. Shutting down the unused ports (f0/5-24 and g0/1-2 on most switches, and f0/7-24 and g0/1-2 on the server switch) means nobody can plug a device into an empty port and get access to the network. This is a basic hardening practice in enterprise networks.
+
+A2.8:
+We configured an SVI on VLAN 10 for each of the seven switches, using addresses from the administration subnet (172.16.1.4 to 172.16.1.10), and pointed each default gateway to 172.16.1.1. Layer 2 switches don’t route, so without an IP address they can’t be managed remotely, and without a default gateway they can’t reply to anyone outside their own subnet. The gateway is the HSRP virtual IP and not the address of one specific router, so management access keeps working even if R1 goes down. This approach gives us one dedicated management subnet for all the switches, which makes SSH access and access control much easier later on.
+
+A3.1:
+We assigned IP addresses and enabled the interfaces on EDGE-ALEX, R1-ALEX and R2-ALEX. Every router-to-router link uses a /30 subnet, because a point-to-point link only needs two usable addresses and a bigger subnet would just waste address space. On R1 and R2 we brought g0/1 up without an IP address, because the addresses are configured on the subinterfaces in A3.2, and the physical interface has to be up for the subinterfaces to work. The serial link to Cairo needs one side to provide the clocking, so we set the clock rate on the EDGE-ALEX side since it is the DCE end. The serial interfaces show as down in the screenshot because the other side was not configured yet at that point.
+
+A3.2:
+We created a dot1Q subinterface for every VLAN on R1 and R2, which is called router-on-a-stick. VLANs are separate broadcast domains, so devices in different VLANs can’t talk to each other without a router. Instead of using one physical interface per VLAN, we used one physical link with a subinterface for each VLAN, and each subinterface is tagged with its VLAN ID using the encapsulation command. The subinterface address acts as the default gateway for that VLAN. R1 and R2 each have their own real IP in every VLAN so that HSRP can use a shared virtual IP on top of them in the next section. This approach saves a lot of physical ports and cabling, and it is very common in small to medium sized networks.
+
+A3.3:
+We configured HSRP on every subinterface, with R1 as the active router (priority 110) and R2 as the standby router (priority 90). The hosts use the virtual IP as their default gateway, so if R1 fails, R2 takes over the same virtual IP and the hosts don’t need to change anything or even notice it. We also enabled preempt, which means that when R1 comes back online it takes the active role again because it has the higher priority. We used one HSRP group per VLAN with the group number matching the VLAN ID, which keeps things easy to read and troubleshoot. The output of the show standby brief command confirms that R1 is active for all seven groups.
+
+A3.4:
+We assigned static IP addresses to the DHCP, AAA, FTP and Web servers and used the HSRP virtual IP as their default gateway. Servers should have static addresses because other devices depend on them being in a fixed place. For example, the helper address points to the DHCP server, and the web server has a static public NAT mapping to its address. The DHCP, AAA and FTP servers are in the internal servers VLAN (172.16.1.20 to 172.16.1.22) with 172.16.1.17 as the gateway, while the web server is alone in the DMZ VLAN (172.16.1.28) with 172.16.1.25 as the gateway. Separating the public web server from the internal servers means that if the web server gets compromised, the attacker doesn’t have direct access to the internal servers.
+
+A3.5:
+We configured one DHCP pool per VLAN on the DHCP server, and each pool has its own default gateway (the HSRP virtual IP of that VLAN), a DNS server address, and a subnet mask that matches the VLAN. The start address of each pool is shifted a few addresses up from the beginning of the subnet, so the first addresses are left out of the pool and reserved for the gateways, the routers and other static devices. This prevents the DHCP server from handing out an address that is already used by a network device and causing an IP conflict. Having one central DHCP server for all the VLANs is much easier to manage than running a DHCP service on every router.
+
+A3.6:
+We configured ip helper-address on all the VLAN subinterfaces of R1 and R2, pointing to the DHCP server at 172.16.1.20. When a host needs an address it sends a DHCP discover as a broadcast, and routers don’t forward broadcasts, so the request would never reach the DHCP server in a different VLAN. The helper address makes the router convert the broadcast into a unicast and send it to the server. We applied it on both routers so DHCP keeps working after an HSRP failover.
+
+A3.7:
+We verified that the end devices received their addresses from the DHCP server. PC1 got 172.16.1.11/28, Laptop2 got 172.16.0.204/27 and the IP camera got 172.16.0.139/26. Each one received an address from the correct pool, with the correct gateway (the HSRP virtual IP) and the DNS server. This proves that the access ports, the VLANs, the trunks, the helper addresses and the DHCP pools are all working together properly.
+
+A4.1:
+We configured OSPF on EDGE-ALEX, R1 and R2, with all the campus networks in area 1, and gave each router a manual router ID (1.1.1.1, 2.2.2.2 and 3.3.3.3) so the IDs are predictable and don’t depend on interface addresses. We made all the LAN subinterfaces passive, which means OSPF still advertises those networks but doesn’t send hello packets to the hosts. This saves bandwidth and prevents anyone on a user VLAN from forming an OSPF neighbor relationship with the router and injecting fake routes. EDGE-ALEX sits between area 1 and area 0 (the link to Cairo), so it acts as the ABR. The show ip ospf neighbor output shows EDGE-ALEX has FULL adjacencies with both R1 and R2.
+
+A4.2:
+We placed the serial link between Alexandria and Cairo (EDGE-ALEX Serial0/0/1, 172.16.1.40/30) in OSPF area 0. Area 0 is the backbone, and every other area has to connect to it. Since this link connects the two hospitals, it makes sense for it to be the backbone, with the Alexandria campus as area 1 hanging off it through EDGE-ALEX.
+
+A4.3:
+We configured a static default route on EDGE-ALEX pointing to the ISP at 200.200.200.1, and used the default-information originate command under OSPF. EDGE-ALEX is the only router connected to the internet, so it is the only one that needs to know the path out. The default-information originate command then advertises that default route to R1, R2 and the Cairo branch, so none of them need their own static default route. It only advertises the route when EDGE-ALEX already has a default route in its routing table, so if the ISP route is removed, the other routers won’t send their traffic to a dead end.
+
+A4.4:
+We configured PAT on EDGE-ALEX using a standard ACL called NAT-PRIVATE-NETWORKS that permits all the private ranges of both Alexandria and Cairo. Private addresses can’t be routed on the internet, so they have to be translated before leaving the network. With PAT overload, all the internal hosts share the single public IP of Serial0/0/0, and the router tells the connections apart by their port numbers. The ACL controls exactly which networks get translated. Cairo is included because its internet traffic goes out through EDGE-ALEX. The interfaces facing the internal network (g0/0, g0/1 and s0/0/1) are marked as ip nat inside, and the ISP-facing interface (s0/0/0) is marked as ip nat outside.
+
+A5.1:
+We created a dedicated FTP user account (BSEALEX) with only read and write permissions. By default the account that comes with the server has full permissions, including delete, rename and list, so we gave the new account only what it needs to upload and download files. This follows the principle of least privilege, which means a user should only have the minimum rights needed to do the job.
+
+A5.2:
+We turned on the AAA service on the AAA server (RADIUS, port 1645) and created the user account BSEALEX. AAA stands for authentication, authorization and accounting, and having it on a central server means user accounts can be managed in one place instead of on every single device. RADIUS is a common protocol for this, and it is widely used in enterprise networks.
+
+A5.6:
+We enabled HTTP on the web server and tested it from PC1 by opening http://172.16.1.28 in the browser, which loaded the hospital welcome page. The point of testing from every VLAN is to prove that inter-VLAN routing, the HSRP gateways, the OSPF routes and the DMZ placement all work together, and that every department can reach the web server.
+
+A5.7:
+We configured SSH on all the routers and switches. Each device already has a hostname, and we added a domain name, because both are needed to generate the RSA keys. We created a local admin user with privilege 15 and a secret password, generated 1024-bit RSA keys, forced SSH version 2, and set the VTY lines to login local with transport input ssh. Telnet sends everything, including passwords, in clear text, so anyone sniffing the network could read them. SSH encrypts the whole session, and SSH version 2 is more secure than version 1. Allowing only SSH on the VTY lines means Telnet is completely blocked. The screenshot shows a successful SSH login from PC1 to Core-1 and EDGE-ALEX.
+
+A5.8:
+We configured an enable secret, service password-encryption and a login banner on all the devices. The enable secret stores the privileged mode password as a hash, unlike the plain enable password which is stored in clear text. The service password-encryption command encrypts the rest of the passwords in the configuration file (like the line and username passwords), so they can’t be read by someone looking at the running config over our shoulder. It is a weak type of encryption, but it is still better than clear text. The banner warns anyone connecting that unauthorized access is prohibited, which is important because it gives us a legal notice in case someone tries to break in.
+
+A5.9:
+We created a standard ACL called SSH-ACCESS that permits only the admin subnet (172.16.1.0/28) and applied it to the VTY lines using access-class in. Even though SSH is already secure, there is no reason for a user in HR or the clinical VLAN to be able to reach the management interface of a switch or a router. This way only the admin VLAN can manage the devices, and anyone else gets rejected even with valid credentials. This approach is very common in production environments, because it reduces the attack surface of the network devices.
+
+A5.10:
+We tested HSRP failover by shutting down the g0/1 interface on R1. The logs on R2 show every HSRP group moving from standby to active, and the hosts kept their connectivity because they use the virtual IP as their gateway. When we brought the interface back up, R1 took the active role again for all the groups because we enabled preempt and it has the higher priority. This proves that the gateway redundancy works in both directions, failover and recovery, without any manual changes.
+
+A5.11:
+We checked the status of the main Layer 2 and Layer 3 protocols on all the devices. Both core switches show Po1 as (SU) with Fa0/2 and Fa0/3 bundled (P) using LACP. The server switch shows VTP in client mode and has learned the 12 VLANs from the core. The spanning tree output shows Core-1 is the root bridge for all the VLANs (priority 24576), Core-2 is the secondary (priority 28672) and reaches the root through Po1, and every access switch has Fa0/1 as its root port toward Core-1 and Fa0/2 blocking toward Core-2. This means the network is loop free but still has a backup path. Finally, EDGE-ALEX shows FULL OSPF adjacencies with R1 and R2, and both R1 and R2 show FULL with EDGE-ALEX.
