@@ -112,3 +112,16 @@ login authentication CONSOLE
 exit
 
 
+
+
+# port security
+conf t
+interface range fa0/3-4
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+
+end
+sh port-se
+
