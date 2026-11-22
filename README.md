@@ -1,6 +1,6 @@
 # University Hospital Network — Cisco Packet Tracer
 
-This project designs and documents a two-site university hospital network for Alexandria and Cairo. It was built in **Cisco Packet Tracer 8.2.2** as a CCNA networking project by the Black Sun Empire (BSE) team.
+This project designs and documents a two-site university hospital network for Alexandria and Cairo. It was built in **Cisco Packet Tracer 9.0.1** as a CCNA networking project by the Black Sun Empire (BSE) team.
 
 ## Project files
 
