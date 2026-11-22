@@ -18,6 +18,6 @@ Requirements:
 11. Use SSH on at least one router.
 12. Document each step in a PDF file with detailed screenshots and simple explanations.
 
-Packet Tracer version: 8.2.2
+Packet Tracer version: 8.2.2 or later
 
-Deadline: 21/11/2025
+Deadline: 21/11/2026
